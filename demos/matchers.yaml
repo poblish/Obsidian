@@ -1,0 +1,43 @@
+- assert: {that: GitHub, eq: GitHub,
+                         equals: GitHub,  # AND
+                         anyOf: {GitHub, GitHub, orSomethingElse},  # OR
+                         eqIgnoreCase: giThub,
+                         equalsIgnoreCase: {giThub, github, GitHuB},
+                         not eq: github,  # NOT
+                         not equals: {giThub, xxx, "", '', null},
+                         not eqIgnoreCase: zzz,
+                         not equalsIgnoreCase: xxx,
+                         contains: {itHub, Git},  # AND
+                         containsIgnoreCase: {ithub, th, ub},  # AND
+                         containsIgnoreWhitespace: {'  tHub', 'Gi  ', ub},
+                         containsIgnoreCaseWhitespace: {' ithub', 'th  ', ub},
+                         not contains: {xxx, Blah},  # NOT
+                         startsWith: GitH,
+                         startsWithIgnoreCase: {gith, gi},
+                         not startsWith: xxx,
+                         endsWith: tHub,
+                         endsWithIgnoreCase: thub,
+                         not endsWith: xxx,
+                         matches: 'G\S+ub',
+                         matchesIgnoreCase: thub,
+                         not matches: 'G\s+ub'}
+
+- assert: {that: 123345, eq: 123345,
+                         equals: 123345,
+                         not equals: 9876543,
+                         gt: 1,
+                         not gt: 9876543,
+                         gte: {1,123345},
+                         not gte: 9876543,
+                         lt: 9876543,
+                         not lt: 1,
+                         lte: {9876543,123345},
+                         not lte: 1}
+
+- assert: {that: ' Lorem ipsum dolor sit amet',
+           containsIgnoreWhitespace: {' Lorem', 'Lorem  ', 'Lorem
+
+                                                    ipsum     dolor '},
+           containsIgnoreCaseWhitespace: {' LOREM', 'lorem  ', 'Lorem
+
+                                                    IPsum     dolor '}}

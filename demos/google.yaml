@@ -1,0 +1,6 @@
+Google test:
+- url: http://www.google.co.uk
+- type: rembrandt van rijn wikipedia return
+  in: input[type=text]
+# Test first match
+- waitFor: {that: '#rso h3', equals: 'Rembrandt - Wikipedia'}

@@ -1,0 +1,24 @@
+browsers: htmlunit
+
+set:
+  Car:  input[value="Car"]
+  Bike: input[value="Bike"]
+
+Checkboxes with checked/unchecked:
+- url: local:demos/static_pages/inputs.html
+
+- waitFor: 'attr( ${Car} ).selected()'
+- assert: 'not attr( ${Bike} ).selected()'
+
+- checked: ${Bike}
+- checked: ${Bike}  # Has no effect
+- assert: 'attr( ${Bike} ).selected()'
+
+- unchecked: ${Car}
+- assert: 'not attr( ${Car} ).selected()'
+
+Regular clicks toggle:
+- click: ${Bike}  # Toggle off
+- assert: 'not attr( ${Bike} ).selected()'
+- click: ${Bike}  # Toggle on
+- assert: 'attr( ${Bike} ).selected()'
