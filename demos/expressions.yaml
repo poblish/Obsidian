@@ -1,0 +1,67 @@
+set:
+   a: Hello
+   b: 1979
+   c: "1979"
+   d: User_${randomString()}
+   e: Pass_${randomLong()}
+
+Expression capablities:
+- assert: {that: '${a}', eq: Hello}
+- assert: {that: 'S${a}x', eq: SHellox}
+- assert: {that: '${b}', eq: 1979}
+- assert: {that: '${b + 2}', eq: 1981}
+- assert: {that: '${b * 11}', eq: 21769}
+- assert: {that: 5000, eq: '${(b + 21) * 10 / 4}'}
+- assert: {that: '${a}_${b}_${a}_${b}', eq: Hello_1979_Hello_1979}
+- assert: {that: '${math:min(b,1900)} - ${math:max(b,1900)}, diff = ${math:max(c,1900) - math:min(c,1900)}', eq: '1900 - 1979, diff = 79'} # pick min / pick max
+- assert: {that: 'Nearest int = ${math:rint( c / 11 )}', startsWith: 'Nearest int = 180'} # round to nearest integer
+- assert: {that: 'Floor = ${math:floor( c / 11 )}', startsWith: 'Floor = 179'} # round to lower integer (down)
+- echo: 'User Id is now:   ${d}, Pass is: ${e}'
+- echo: 'User Id is still: ${d}, Pass is: ${e}'
+
+Additional numeric comma-related tests:
+- assert: {that: '29,856', eq: 29856}
+- assert: {that: '29,856', eq: '${29856}'}
+- assert: {that: 29856, eq: '29,856'}
+- assert: {that: '29,856', eq: '29,856'}
+# EL doesn't allow this... - assert: {that: '29,856', eq: '${29,856}'}
+- set count: 29,856
+- assert: {that: 29853, eq: '${count - 3}'}
+- assert: {that: '${count - 3}', eq: 29853}
+- assert: {that: '${count - 3.1}', eq: 29852.9}
+- set val: 3.14159
+- assert: {that: '${val - 3.05}', gte: 0.09159, lt: 0.0915901}
+- set longVal: 93214748323647
+- assert: {that: '${longVal + 18181}', eq: 93214748341828}
+
+Additional functions:
+- assert: {that: '${web:browserName()}', anyOf: {No-op, '???'}}
+
+Increment and decrement:
+- assert: {that: '${b}', eq: 1979}
+- inc: b
+- assert: {that: '${b}', eq: 1980}
+- dec: b
+- assert: {that: '${b}', eq: 1979}
+
+Validation functions:
+- assert: ${commons:validate("CreditCard", 4556071143190644)}  # Short form
+- assert: ${commons:validate("CreditCard", 5586729183315014)}  # Short form
+- assert: ${commons:validate("CreditCard", 342868508335640)}  # Short form
+- assert: {that: '${commons:validate("CreditCard", 4556071143190644)}', eq: true}  # Long form
+
+- assert: not ${commons:validate("CreditCard", 2556071143190644)}
+- assert: not ${commons:validate("CreditCard", "")}
+
+- assert: ${commons:validate("url", "http://www.apple.com")}
+- assert: ${commons:validate("url", "http://правительство.рф")}
+- assert: ${commons:validate("url", "http://shopping.在线")}
+- assert: ${commons:validate("url", "http://localhost:9200/blah")}
+- assert: not ${commons:validate("url", "httpa://www.apple.com")}
+
+- assert: ${commons:validate("email", "aregan@gmail.com")}
+- assert: not ${commons:validate("email", "@gmail.com")}
+
+- assert: ${commons:validate("isbn", "0-306-40615-2")}
+- assert: ${commons:validate("isbn", 9780306406157)}
+- assert: not ${commons:validate("isbn", 8780306406157)}

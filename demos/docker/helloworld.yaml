@@ -1,0 +1,4 @@
+Set up HelloWorld container:
+- docker:container: {image: 'hello-world:linux', setAs: hello}
+- waitFor: {that: "${hello.output()}",
+            contains: {"Hello from Docker!", "This message shows that your installation appears to be working correctly."}}

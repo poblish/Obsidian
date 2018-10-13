@@ -1,0 +1,52 @@
+ns: {^: 'jdbc:'}
+
+set:
+  MyName: Mr ${randomString()}
+
+Set up PG container:
+- docker:container: {image: "postgres:9.4", ports: [5432]}
+
+#################################################
+
+Test postgres:
+
+- ^connect: {type: postgres, port: 5432, database: postgres, user: postgres, pass: }
+- waitFor: {that: '^select(1)', eq: '{?column?=1}'}  # May take a few secs...
+
+# Extra checks, syntax tests...
+- assert: {that: '^select(version())', matches: 'PostgreSQL 9.4.[0-9]* on x86_64'}
+- assert: {that: '^select( * from pg_database)', contains: 'datname=template1,'}
+- assert: {that: '^select(SELECT * from pg_database)', contains: 'datname=template1,'}
+- assert: {that: '^select(EXPLAIN ANALYZE select * from pg_database)', contains: 'QUERY PLAN=Seq Scan on pg_database'}
+
+- ^select:
+    datctype from pg_database where datname='postgres'
+- ^select:
+    select * from pg_database LIMIT 1
+- ^update:
+    CREATE TABLE account( user_id serial PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, email VARCHAR (355) UNIQUE NOT NULL, created_on TIMESTAMP NOT NULL )
+- ^update:
+    INSERT INTO account (username, password, email, created_on) VALUES ('${MyName}','Blah', 'a@b.com', CURRENT_TIMESTAMP)
+
+- assert:
+    that: ^select(SELECT username from account)
+    eq: '{username=${MyName}}'
+
+- ^delete:
+    FROM account WHERE username='${MyName}'
+
+#################################################
+
+Import from file:
+
+- ^load:
+    from: file:demos/docker/sql/accounts.sql
+    into: account
+
+- assert:
+    that: ^select(SELECT username from account)
+    eq: '{username=Andrew},{username=Bob},{username=Carol}'
+
+- finally:
+  - ^delete:
+      FROM account
