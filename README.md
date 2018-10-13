@@ -100,7 +100,18 @@ Run without GUI:
 
     ./nogui.sh demos/file.yaml  # One script
     ./nogui.sh demos/           # All in a folder...
-    ./headless.sh demos/        # This time, headless only
+
+Longer form, showing global defaults and overrides (enforce headless Chrome-only):
+
+    java -jar dist/obsidian.jar \
+         --nogui \
+         --defaultConfig="{systemProperties: {env: Test}, defaults: {window: {width: 1200}}}" \
+         --overrideConfig="browsers: chrome" \
+         demos/google.yaml
+
+---
+
+## Runnning Cucumber Scenarios
 
 Run Cucumber (specifying list of scenarios, and list of implementations):
 
