@@ -1,0 +1,10 @@
+^login:
+- type: "${login:username}"
+  in: ~username
+- type: "${login:password}"
+  in: ~password
+- submit: "#login"
+
+^logout:
+- click: .icon-signout
+- waitFor: {that: h2, eq: Login Page}

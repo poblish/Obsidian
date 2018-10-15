@@ -1,0 +1,12 @@
+handlers: {demos/_userLoginHandlers.yaml}
+
+Login and logout using handler scripts:
+
+- initially:
+  - url: https://the-internet.herokuapp.com/login
+  - user: {user: tomsmith, pass: SuperSecretPassword!}
+
+- waitFor: {that: h4, eq: Welcome to the Secure Area. When you are done click logout below.}
+
+- finally:
+  - logout:

@@ -1,0 +1,3 @@
+^myOtherMethod(name, otherName):
+- echo: ==> Enter with `${name} ${otherName}` ...
+- echo: <== Leaving

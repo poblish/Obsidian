@@ -1,0 +1,9 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/fault"
+  },
+  "response": {
+    "fault": "CONNECTION_RESET_BY_PEER"
+  }
+}

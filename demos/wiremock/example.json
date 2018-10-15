@@ -1,0 +1,42 @@
+{
+  "request" : {
+    "urlPath" : "/everything",
+    "method" : "ANY",
+    "headers" : {
+      "Accept" : {
+        "contains" : "xml"
+      }
+    },
+    "queryParameters" : {
+      "search_term" : {
+        "equalTo" : "WireMock"
+      }
+    },
+    "cookies" : {
+      "session" : {
+        "matches" : ".*12345.*"
+      }
+    },
+    "multipartPatterns" : [ {
+      "matchingType" : "ANY",
+      "headers" : {
+        "Content-Disposition" : {
+          "contains" : "name=\"info\""
+        },
+        "Content-Type" : {
+          "contains" : "charset"
+        }
+      },
+      "bodyPatterns" : [ {
+        "equalTo" : "Hello World!"
+      } ]
+    } ],
+    "basicAuthCredentials" : {
+      "username" : "admin",
+      "password" : "password"
+    }
+  },
+  "response" : {
+    "status" : 200
+  }
+}

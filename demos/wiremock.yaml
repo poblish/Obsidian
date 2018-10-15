@@ -1,0 +1,55 @@
+ns: {X: 'http:'}
+api:wiremock: {local-port: 8089}
+
+set:
+  baseUrl: http://localhost:8089
+
+Sample API:
+- api:wireMockMappings: |
+    {
+      "request": {
+        "method": "GET",
+        "url": "/some/thing"
+      },
+      "response": {
+        "status": 200,
+        "body": "Hello world!",
+        "headers": {
+         "Content-Type": "text/plain"
+        }
+      }
+    }
+
+- waitFor: 'XGET(${baseUrl}/some/thing)'
+- assert: {that: 'XGET(${baseUrl}/some/thing).content()', eq: Hello world!}
+- assert: {that: 'XGET(${baseUrl}/some/thing).header(Content-Type)', eq: text/plain}
+- assert: 'not XGET(${baseUrl}/some/else)'
+- assert: 'not XPOST(${baseUrl}/some/thing)'
+
+################################################  Connection reset
+
+# Will reset before applying
+- api:wireMockMappings: {file: demos/wiremock/connection_reset.json}
+- waitFor: {that: 'XGET(${baseUrl}/fault).error()', contains: Connection reset}
+
+################################################  Connection reset
+
+# Will reset before applying
+- api:wireMockMappings: {file: demos/wiremock/empty_response.json}
+- waitFor: {that: 'XGET(${baseUrl}/empty).error()', contains: failed to respond}
+
+################################################  Cookies, query, credentials, Multipart
+
+# Will reset before applying
+- api:wireMockMappings: {file: demos/wiremock/example.json}
+
+- cookie set: {name: session, value: x12345y, domain: localhost}
+
+- waitFor:
+    # no-cache is just for demonstration
+    that: 'XGET(to: ${baseUrl}/everything?search_term=WireMock,
+                content:[{name: info | content-type: text/plain; charset=utf-8 | text: Hello World!}],
+                credentials:"admin:password",
+                Accept: application/xml,
+                no-cache:).status()'
+    eq: 200

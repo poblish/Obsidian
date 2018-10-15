@@ -1,0 +1,30 @@
+browsers: {htmlunit}
+handlers: {demos/_subroutine_handlers.yaml}
+
+set:
+  name: ShouldNotChange
+  otherName: ShouldNotChange
+  url: ShouldNotChange
+  Name1: Soren
+  Name2: Lorensen
+
+Subroutines demo:
+- call: myMethod(${Name1}, local:demos/static_pages/ipsum.html)
+- call: myMethod(${Name2}, local:demos/static_pages/css.html)
+- call: myOtherMethod(${Name1}, ${Name2})
+
+# Check 'global' names unchanged
+- assert: {that: '${Name1}', eq: Soren}
+- assert: {that: '${Name2}', eq: Lorensen}
+# Check 'local' arg names haven't propagated to 'global'
+- assert: {that: '${name}', eq: ShouldNotChange}
+- assert: {that: '${otherName}', eq: ShouldNotChange}
+- assert: {that: '${url}', eq: ShouldNotChange}
+- echo: FINISHED, globals still `${name}`, `${otherName}`, `${url}`
+
+##############################################
+
+^myMethod(name, url):
+- echo: => Entering myMethod with `${name}`...
+- url: ${url}
+- echo: <= Leaving
