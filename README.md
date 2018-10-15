@@ -96,10 +96,19 @@ Run with GUI:
 
     ./gui.sh
 
-Run without GUI:
+Run without GUI, with local web browsers:
 
-    ./nogui.sh demos/file.yaml  # One script
-    ./nogui.sh demos/           # All in a folder...
+    ./local.sh demos/google.yaml demos/fixme.yaml ...
+
+    ./local.sh demos/  # All in a folder...
+
+Run using a local Selenium Grid:
+
+    ./grid_local.sh demos/google.yaml ...
+
+Run using a remote Selenium Grid:
+
+    ./grid_remote.sh host:port demos/google.yaml ...
 
 Longer form, showing global defaults and overrides (enforce headless Chrome-only):
 
