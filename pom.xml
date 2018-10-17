@@ -95,6 +95,11 @@
             <artifactId>hamkrest</artifactId>
             <version>1.6.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.natpryce</groupId>
+            <artifactId>konfig</artifactId>
+            <version>1.6.10.0</version>
+        </dependency>
 
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
