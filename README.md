@@ -6,8 +6,22 @@ Test scenarios are YAML files, ensuring equal accessibility for developers and t
 
 Obsidian is an integration of existing web-based technologies, combined with robust assertions, all accessible via common DSL.
 
+* [Goals](#goals)
+* [Technologies](#tech)
+* [Examples](#examples)
+* [Installation](docs/installation.md)
+* [Running](#running)
+* [Design Decisions](docs/design_decisions.md)
+* [Command Reference](docs/cmd_ref.md)
 
-#### Integrated technologies:
+## <a name="goals"></a>Goals:
+
+* Simple commands for the lightest, most maintainable tests
+* YAML for ease of reading, editor support, linters, consistent syntax
+* Deterministic tests: perform operations but check / assert everything
+
+
+## <a name="tech"></a>Integrated technologies:
 
 * WebDriver via [Selenium 3.x](https://github.com/SeleniumHQ/selenium)
   * Local browsers, or via local/remote Selenium Grid
@@ -23,15 +37,7 @@ Obsidian is an integration of existing web-based technologies, combined with rob
 * Amazon S3 and Redis commands and lookups
 * XML / JSON / JavaScript / Cookies
 
-#### Goals:
-
-* Simple commands for the lightest, most maintainable tests
-* YAML for ease of reading, editor support, linters, consistent syntax
-* Deterministic tests: perform operations but check / assert everything
-
-
----
-## Examples
+## <a name="examples"></a>Examples
 
 1. A **cross-browser** test:
 
@@ -88,9 +94,9 @@ Obsidian is an integration of existing web-based technologies, combined with rob
                    gte: {1,123345},
                    lt: 9876543}
 
----
 
-## Runnning Scenarios
+
+## <a name="running"></a>Runnning Scenarios
 
 Run with GUI:
 
@@ -118,7 +124,7 @@ Longer form, showing global defaults and overrides (enforce headless Chrome-only
          --overrideConfig="browsers: chrome" \
          demos/google.yaml
 
----
+
 
 ## Runnning Cucumber Scenarios
 
