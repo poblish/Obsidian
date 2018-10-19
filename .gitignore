@@ -1,0 +1,12 @@
+.classpath
+.idea/
+dist/
+test-output/
+generated/
+maven-archiver/
+/target/
+phantomjsdriver.log
+dependency-reduced-pom.xml
+.DS_Store
+.google_api.key
+src/test/resources/Experimental/snapshots/images
