@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>3.14.0</selenium.version>
-        <dagger.version>2.17</dagger.version>
+        <dagger.version>2.18</dagger.version>
         <jetty.version>9.4.12.v20180830</jetty.version>
         <metrics.version>4.0.3</metrics.version>
         <jackson.version>2.9.7</jackson.version>
