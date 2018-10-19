@@ -1,0 +1,22 @@
+Project Reports:
+  testCaseDataLocation: demos/cases/testcases.xml
+  generatedReportLocation: demos/cases/generated/
+
+##############################################################
+
+Scenario 1:
+- url: local:demos/static_pages/ok_links.html
+- cases:
+  - {id: 'TestScenarios/2'}
+- echo: Blah
+
+- cases:
+  - {id: 'TestScenarios/1', subtypes: link1}
+- click: ~ipsum
+
+- cases:
+  - {id: 'TestScenarios/1', subtypes: {link2, download}}
+- back:
+- click: '#download'
+
+# All tests pass

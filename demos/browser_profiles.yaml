@@ -1,0 +1,31 @@
+# Can use the following approach to override User-Agent for each browser:
+# http://luhonghai.com/blog/2014/07/10/selenium-webdriver-set-browsers-user-agent-and-proxy/
+
+profile:firefox: {extensions: {'demos/browser_profiles/Firefox/firebug-2.0.4.xpi'},
+  extensions.firebug.currentVersion: 2.0.4,
+  extensions.firebug.allPagesActivation: on,
+  extensions.firebug.defaultPanelName: net,
+  extensions.firebug.net.enableSites: true}
+  #app.update.enabled: false }
+
+# See: https://sites.google.com/a/chromium.org/chromedriver/capabilities
+profile:chrome: {extensions: {'demos/browser_profiles/Chrome/example.crx'},
+  args: {'start-maximized'},
+  profile.default_content_settings.popups: 0 }
+
+browsers: {chrome,firefox}
+
+Basic sanity checks:
+# FIXME Should really test some of the capabilities we've requested, e.g. FindBugs, the Chrome ext
+- url: local:demos/static_pages/ipsum.html
+- assert: {that: p, contains: Pellentesque habitant morbi tristique}
+
+# Just for fun, check that the following substrings appear anywhere on the page
+- assert: {that: '*',
+           anyContain: {'HTML Ipsum',
+                        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit',
+                        'Aliquam tincidunt mauris eu risus'}
+}
+
+# Check the EL function returns the names correctly
+- assert: {that: '${web:driverNames()}', eq: 'Chrome,Firefox'}

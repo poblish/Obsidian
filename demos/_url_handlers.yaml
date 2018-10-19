@@ -1,0 +1,7 @@
+# Handlers & subroutines for 'url.yaml'. Not (meaningfully) runnable on its own.
+
+^@BeforeGoToUrl:
+- echo: '(Before loading URL)'
+
+^@AfterGoToUrl logUrls:
+- echo: '(Finished loading URL)'

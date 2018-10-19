@@ -1,0 +1,7 @@
+# Use custom capabilities ('session') to request multiple, distinct instances per browser type: 6 in total
+browsers: {htmlunit: [{session: 1},{session: 2},{session: 3, extra: blah}], firefox, chrome: [{session: 1},{session: 2}]}
+
+Simplest content validation:
+- url: local:demos/static_pages/ipsum.html
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}
+- assert: {that: '${web:driverNameInstances()}', eq: 'Htmlunit,Htmlunit,Htmlunit,Firefox,Chrome,Chrome'}

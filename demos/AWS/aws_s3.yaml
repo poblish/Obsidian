@@ -1,0 +1,37 @@
+ns: {$: 'AWS.S3:'}  # Shorthand
+
+set:
+  S3Port:   9091
+  TestBucket: bucket-${randomString()}
+  KeyName:  key_${randomString()}
+  Path1:    demos/AWS/test_data/a.xml
+  Key2:     key_${randomString()}
+  Path2:    demos/AWS/test_data/b.txt
+
+Set up / wait for S3 mock container:
+- docker:container: {image: "adobe/s3mock:latest", ports: ['${S3Port}:9090']}
+- waitFor: {that: 'http:GET(http://localhost:${S3Port}).status()', eq: 200}
+
+Simplistic AWS S3 Bucket assertions:
+- $envt: {endpointUrl: "http://localhost:${S3Port}", pathStyle: true}
+- $create: {bucket: '${TestBucket}'}
+- $clear: {bucket: '${TestBucket}'}
+
+- $put: {file: '${Path1}', bucket: '${TestBucket}', as: '${KeyName}', expires: '2 secs'}
+# Can't get expiry to work...
+- assert: {that: 's3.bucket(${TestBucket}).keys()', eq: '${KeyName}'}
+- assert: {that: 's3.bucket(${TestBucket}).contents()', eq: 'file:${Path1}'}
+- assert: {that: 's3.bucket(${TestBucket}).etags()', eq: 8c073256166f40bfb0c529f121ace43a}
+- assert: {that: 's3.bucket(${TestBucket}).sizes()', eq: 584}
+- assert: {that: 's3.bucket(${TestBucket}).count()', eq: 1}
+- assert: {that: 's3.bucket(${TestBucket}).list()', startsWith: '{key=${KeyName}, etag=8c073256166f40bfb0c529f121ace43a, bytes=584, lastMod='}
+
+- $put: {file: '${Path2}', bucket: '${TestBucket}', as: '${Key2}'}
+- assert: {that: 's3.bucket(${TestBucket}).keys()', eq: '${Key2},${KeyName}'}
+- assert: {that: 's3.bucket(${TestBucket}).contents()', contains: {'file:${Path1}', 'file:${Path2}'}}
+- assert: {that: 's3.bucket(${TestBucket}).etags()', eq: 'd19308483a72bd959c9c26d82af2e542,8c073256166f40bfb0c529f121ace43a'}
+- assert: {that: 's3.bucket(${TestBucket}).sizes()', eq: '15,584'}
+- assert: {that: 's3.bucket(${TestBucket}).count()', eq: 2}
+
+finally:
+- $delete: {bucket: '${TestBucket}'}

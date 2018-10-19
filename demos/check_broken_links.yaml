@@ -1,0 +1,13 @@
+Check OK page passes:
+- url: local:demos/static_pages/ok_links.html
+- checkBrokenLinks: # Use GET
+- checkBrokenLinks: {method: head}
+
+Check broken page fails:
+- url: broken_links.html
+- checkBrokenLinks: {expectFail: true}  # Use GET
+- checkBrokenLinks: {method: head, expectFail: true}
+
+Page with no links fails:
+- url: h1_h6_headers.html
+- checkBrokenLinks: {expectFail: true}

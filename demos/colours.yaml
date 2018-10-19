@@ -1,0 +1,8 @@
+# See: https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
+- echo: "\e[0;1;36m Cyan \e[0;39m... Normal"
+- echo: "\e[0;1;96m Bright Cyan \e[0;39m... Normal"
+- echo: "\e[0;1;38;5;221mYellowish custom\e[0;39m ... Normal"
+- echo: "\e[0;4;38;5;113mGreen custom, underline not bold\e[0;39m ... Normal"
+- echo: "\e[0;1;4;38;5;28m>>>  Scenario: 'Untitled-0'...\e[0;39m"
+- echo: "\e[0;1;94;47m Blue on White \e[0;39m... Normal"

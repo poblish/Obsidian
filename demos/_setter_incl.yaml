@@ -1,0 +1,2 @@
+- echo: Resetting 'x' to 1
+- set x: 1

@@ -1,0 +1,19 @@
+browsers: {chrome}
+
+CSS3 test:
+- url: local:demos/static_pages/css.html
+- waitFor: {that: 'ul[aria-label="News"] li.selected span', eq: 'Home'}
+- assert: {that: '#body p:nth-of-type(1)', eq: World}
+- assert: {that: '#body p:nth-of-type(2)', eq: Sport}
+- assert: {that: '#body p:nth-of-type(3)', eq: Politics}
+- assert: {that: '#body p:nth-of-type(4)', eq: Tech}
+- assert: not p:nth-of-type(5)  # No 5th paragraph!
+- assert: {that: '#body p:first-of-type', eq: World}
+- assert: {that: '#body p:last-of-type', eq: Tech}
+
+# More old-style matching
+- assert: {that: a, with: 'href=http://www.apple.com/', eq: Apple Link}
+- assert: {that: 'p#blah', with: 'attr=val'}
+- assert: {that: p, withClass: myClazz}
+- assert: {that: p, with: 'style.color=rgba(255, 0, 0, 1)', eq: Hello Apple Link and bye!}
+- assert: {that: p, with: 'style.display=block'}

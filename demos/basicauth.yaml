@@ -1,0 +1,8 @@
+profile:chrome:   # Vanilla Chrome options, disable default "--headless" which doesn't seem to work with Proxy
+basicAuth: {'jigsaw.w3.org': 'guest:guest'}
+
+# More examples at: https://jigsaw.w3.org/HTTP/
+
+Bypassing BasicAuth:
+- url: https://jigsaw.w3.org/HTTP/Basic/
+- waitFor: {that: body, eq: Your browser made it!}

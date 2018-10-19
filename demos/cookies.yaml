@@ -1,0 +1,50 @@
+browsers: {htmlunit}
+
+
+Set up HTTP first:
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/static_pages, to: /static}
+
+set:
+  Page:    http://localhost:9877/static/ipsum.html
+  CName:   name_${randomString()}
+  CName2:  name_${randomString()}
+  CValue:  value_${randomString()}
+  CValue2: value_${randomString()}
+
+################################################################
+
+Cookies test:
+- url: '${Page}'
+- assert: {that: cookies.names(), eq: ''}
+
+- cookie set: {name: '${CName}', value: '${CValue}'}
+- assert: {that: cookies.names(), eq: '${CName}'}
+- assert: {that: 'cookies.get(${CName})', eq: '${CValue}'}
+
+# Change value
+- cookie set: {name: '${CName}', value: '${CValue2}'}
+- url: '${Page}'
+- assert: {that: cookies.names(), eq: '${CName}'}
+- assert: {that: 'cookies.get(${CName})', eq: '${CValue2}'}
+
+# Create second one
+- cookie set: {name: '${CName2}', value: '${CValue}'}
+- url: '${Page}'
+- assert: {that: cookies.names(), contains: '${CName}'}
+- assert: {that: cookies.names(), contains: '${CName2}'}
+- assert: {that: 'cookies.get(${CName})', eq: '${CValue2}'}
+- assert: {that: 'cookies.get(${CName2})', eq: '${CValue}'}
+
+# Delete one
+- cookie delete: '${CName}'
+- url: '${Page}'
+- assert: {that: cookies.names(), eq: '${CName2}'}
+- assert: {that: 'cookies.get(${CName})', eq: '<none>'}
+- assert: {that: 'cookies.get(${CName2})', eq: '${CValue}'}
+
+# Delete last one
+- cookie delete: '${CName2}'
+- url: '${Page}'
+- assert: {that: cookies.names(), eq: ''}
+- assert: {that: 'cookies.get(${CName2})', eq: '<none>'}

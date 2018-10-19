@@ -1,0 +1,49 @@
+proxy:
+
+set:
+  Url: http://localhost:9877/static/news.html
+  LoadedOkPattern: 'Strike changes: what do they mean?'
+  LoadTime: 'har_page().time(onload)'
+
+Deploy a folder of static resources:
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/static_pages, to: /static}
+
+Warm-up:
+- url: ${Url}
+- waitFor: {that: source(), matches: '${LoadedOkPattern}'}
+
+###########################
+
+Normal speed:
+- har start:
+- url: ${Url}
+- waitFor: {that: source(), matches: '${LoadedOkPattern}'}
+- set NormalTime: ${LoadTime}
+
+Tighter:
+- bandwidth: {downloadKbps: 3, uploadKbps: 0}
+- har start:
+- url: ${Url}
+- waitFor: {that: source(), matches: '${LoadedOkPattern}'}
+- set SlowDownload: ${LoadTime}
+- hope: {that: '${SlowDownload}', gt: '${NormalTime}'}
+
+Slower:
+- bandwidth: {downloadKbps: 0, latency: 500}
+- har start:
+- url: ${Url}
+- waitFor: {that: source(), matches: '${LoadedOkPattern}'}
+- set HighLatency: ${LoadTime}
+- hope: {that: '${HighLatency}', gt: '${NormalTime}'}
+
+Reset:
+- bandwidth: {downloadKbps: 0, uploadKbps: 0, latency: 0}
+- har start:
+- url: ${Url}
+- waitFor: {that: source(), matches: '${LoadedOkPattern}'}
+- set ResetTime: ${LoadTime}
+- hope: {that: '${ResetTime}', lt: '${SlowDownload}'}
+
+- finally:
+  - proxy stop:  # Not required, but demonstrates explicit stop

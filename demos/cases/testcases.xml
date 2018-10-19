@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><cases>
+  <case id="TestScenarios/1">
+    <desc>The platform MUST include a front-end.</desc>
+
+    <subtype id="link1">
+      <desc>Must have a link</desc>
+      <result>Y</result>
+    </subtype>
+
+    <subtype id="link2">
+      <desc>Must have another link</desc>
+    </subtype>
+
+    <subtype id="download">
+      <desc>Must have another link</desc>
+    </subtype>
+  </case>
+  <case id="TestScenarios/2">
+    <desc>The platform MUST include a loader.</desc>
+    <result>Y</result></case>
+  <case id="TestScenarios/3">
+    <desc>The MVP project MUST include a customer accessible production environment.</desc>
+  </case>
+  <case id="TestScenarios/4">
+    <desc>The MVP project MUST include an test environment. This will be accessible to the client during agreed test phases.</desc>
+  </case>
+  <case id="TestScenarios/5">
+    <desc>The platform MUST include a test environment.</desc>
+  </case>
+</cases>

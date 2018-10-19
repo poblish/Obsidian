@@ -1,0 +1,5 @@
+- set T: ${time:currentMillis()}
+- echo: Current time T=${T}
+- delay until: ${T} + 2 secs
+- # should have expired ...
+- echo: Current time T=${time:currentMillis()}

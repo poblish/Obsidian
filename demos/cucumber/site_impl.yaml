@@ -1,0 +1,23 @@
+browsers: htmlunit
+
+################## Pages
+
+^When("(?:one|someone) visits? the (.*) page"):
+- url: local:demos/static_pages/${1}.html
+
+################## Lookups etc.
+
+^Given(".*searched for \"(.*)\"") ^When(".*search(?:es)? for \"(.*)\""):
+- url: /search?q=${1}
+
+^Then("the title must say \"(.*)\""):
+- waitFor: {that: h1, eq: '${1}'}
+
+^Then("the text should (?:say|contain) \"(.*)\""):
+- waitFor: {that: p, contains: '${1}'}
+
+^Then("a link should say \"(.*)\""):
+- waitFor: {that: a, eq: '${1}'}
+
+^Then("no link should say \"(.*)\""):
+- waitFor: {that: a, not eq: '${1}'}

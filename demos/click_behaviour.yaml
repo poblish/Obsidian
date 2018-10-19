@@ -1,0 +1,19 @@
+browsers: htmlunit
+
+Test successful click:
+- url: local:demos/static_pages/ok_links.html
+- click: ~ipsum
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}  # Page definitely changed
+
+Test ignore failed click:
+- url: local:demos/static_pages/ok_links.html
+- click: {find: ~blah, else: ignore}
+- assert: {that: h1, contains: HTML Ipsum Presents}  # No page change
+
+Test exit scenario after failed click:
+- url: local:demos/static_pages/ok_links.html
+- click: {find: ~sadadsd, else: exit}
+- assert: {that: h1, contains: Would fail if this was actually reached}  # Never reached
+
+finally:
+  - assert: {that: h1, contains: HTML Ipsum Presents}  # Still on original page

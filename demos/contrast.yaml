@@ -1,0 +1,17 @@
+browsers: {chrome}
+
+WCAG contrast:
+- url: local:demos/static_pages/contrast.html
+- assert: {that: 'contrast(#a).ratio()', eq: 18.1}
+- assert: {that: 'contrast(#b).ratio()', eq: 15.46}
+- assert: {that: 'contrast(#c).ratio()', eq: 13.08}
+- assert: {that: 'contrast(#d).ratio()', eq: 3.66}
+
+- assert: {that: 'contrast(#a).checkWcagAA()', eq: pass}  # OK for AA?
+- assert: {that: 'contrast(#a).checkWcagAAA()', eq: pass}  # OK for AAA?
+
+- assert: {that: 'contrast(#c).checkWcagAA()', eq: pass}  # OK for AA?
+- assert: {that: 'contrast(#c).checkWcagAAA()', eq: pass}  # OK for AAA?
+
+- assert: {that: 'contrast(#d).checkWcagAA()', eq: fail}  # OK for AA?
+- assert: {that: 'contrast(#d).checkWcagAAA()', eq: fail}  # OK for AAA?

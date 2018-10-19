@@ -1,0 +1,18 @@
+# See: https://cors-test.appspot.com/
+
+HTTP OPTIONS request:
+- assert: 'http:options(to: https://cors-test.appspot.com/test,
+                        Origin: *,
+                        Access-Control-Request-Method: GET,
+                        Access-Control-Request-Headers: test)'
+
+# Check returned headers
+- assert: {that: '!${lastReq.header("Access-Control-Allow-Origin")}', eq: '*'}
+- assert: {that: '${lastReq.header("Access-Control-Allow-Headers")}', eq: test}
+- assert: {that: '${lastReq.header("Access-Control-Allow-Methods")}', eq: GET}
+- assert: ${lastReq.header("Access-Control-Allow-Credentials")}
+- assert: {that: '${lastReq.header("Access-Control-Max-Age")}', eq: 0}
+
+# Check for promised cookie
+- assert: {that: cookies.get(test), eq: test}
+- assert: {that: cookies.get(different), eq: <none>}
