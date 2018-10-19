@@ -1,0 +1,22 @@
+Actions (non-element) keypresses:
+
+- url: http://the-internet.herokuapp.com/key_presses
+- waitFor: {that: p, contains: Press a key and see what you inputted}
+
+- type: $up
+- waitFor: {that: "#result", eq: "You entered: UP"}
+
+- type: $escape
+- waitFor: {that: "#result", eq: "You entered: ESCAPE"}
+
+- type: Pdkfjfsd tab
+- waitFor: {that: "#result", eq: "You entered: TAB"}
+
+- type: X
+- waitFor: {that: "#result", eq: "You entered: X"}
+
+- type: " "
+- waitFor: {that: "#result", eq: "You entered: SPACE"}
+
+- type: "d"
+- waitFor: {that: "#result", eq: "You entered: D"}

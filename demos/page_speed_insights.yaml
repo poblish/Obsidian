@@ -1,0 +1,16 @@
+google api: {apiKey: 'file(.google_api.key)'}  # Read API key from file in CWD
+
+Google PageSpeed Insights test:
+- insights: {url: 'http://www.apple.com/', strategy: desktop}  # Or 'mobile'
+
+# High-level API
+- assert: {that: 'insights.score()', gte: 68}
+- assert: insights.recommends(EnableGzipCompression)
+- assert: insights.recommends(AvoidLandingPageRedirects)
+- assert: insights.recommends(LeverageBrowserCaching)
+- assert: not insights.recommends(XXXXXX)
+
+# JSON-level access
+- assert: {that: 'insights.node($.ruleGroups.SPEED.score)', gte: 67}
+- assert: insights.exists($.formattedResults.ruleResults.EnableGzipCompression)
+- assert: not insights.exists($.formattedResults.ruleResults.XXXXXX)

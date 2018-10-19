@@ -1,0 +1,15 @@
+Quick JSON test:
+# Set up HTTP first, to avoid hitting the web + introducing variability
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/static_pages/repos.json, to: /json}
+
+# Send the request
+- waitFor: {that: 'json( http://localhost:9877/json ).nodes($.[0,1,2,3].name)',
+            eq: 'bannedList-Plugin,dateUtils,xxx-atom,elasticsearch-osem'}
+
+Check Last works and doesn't cache actual results:
+- assert: {that: '${lastJson.nodes("$.[3,2,1,0].name")}', eq: 'elasticsearch-osem,xxx-atom,dateUtils,bannedList-Plugin'}
+- assert: {that: '${lastJson.nodes("$.[1,3,0,2].name")}', eq: 'dateUtils,elasticsearch-osem,bannedList-Plugin,xxx-atom'}
+- assert: {that: '${lastJson.node("$.[1].name")}', eq: dateUtils}
+- assert: ${lastJson.exists("$.[1].name")}
+- assert: not ${lastJson.exists("$.[1].xxx")}

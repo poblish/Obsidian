@@ -1,0 +1,11 @@
+Set up HTTP server:
+- docker:container: {image: 'mendhak/http-https-echo:latest', ports: ["9080:80"]}
+
+HTTP Post test:
+- waitFor: 'http:POST(to: http://localhost:9080,
+                      content-type:text/xml,
+                      credentials: admin:password,
+                      file: demos/http_post/payload.xml)'
+
+- assert: {that: "${lastReq.content()}",
+           containsIgnoreWhitespace: {'file:demos/http_post/expected/output1.json', 'file:demos/http_post/expected/output2.json'}}

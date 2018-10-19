@@ -1,0 +1,28 @@
+browsers: {chrome}
+
+Lang set to HE:
+- url: local:demos/static_pages/he.html
+# Note, *not* inherited via CSS, so need exact element
+- waitFor: {that: attr(html).lang(), eq: he}
+- assert: {that: 'attr(#firstHeading).lang()', eq: he}
+- assert: {that: p, not eq: he}  # See, not inherited.
+
+Lang set to en-GB, LTR:
+- url: ipsum.html
+- waitFor: {that: attr(html).lang(), eq: en-GB}
+- waitFor: {that: 'css(p).direction()', eq: ltr}
+
+Text align:
+- url: https://developer.mozilla.org/samples/cssref/text-align.html
+- waitFor: {that: css(h1).text-align(), eq: start}
+- assert: {that: css(.left).text-align(), eq: left}
+- assert: {that: css(.right).text-align(), eq: right}
+- assert: {that: css(.center).text-align(), eq: center}
+- assert: {that: css(.justify).text-align(), eq: justify}
+
+RTL:
+- url: local:demos/static_pages/aramaic.htm
+- waitFor: {that: 'css(.syr).direction()', eq: rtl}
+- assert: {that: 'css(.syr).font-family()', eq: Estrangelo Talada}
+- url: http://he.wikipedia.org/wiki/%D7%A2%D7%9E%D7%95%D7%93_%D7%A8%D7%90%D7%A9%D7%99
+- assert: {that: css(p).direction(), eq: rtl}

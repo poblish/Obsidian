@@ -1,0 +1,16 @@
+browsers: {htmlunit}
+
+Test link works even without scrolling:
+- url: local:demos/static_pages/needs_scrolling.html
+- click: a
+
+# Check link was followed
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}
+
+Test link works with explicit scrolling:
+- url: needs_scrolling.html
+- scroll: a
+- click: a
+
+# Check link was followed
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}

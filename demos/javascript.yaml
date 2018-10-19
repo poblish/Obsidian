@@ -1,0 +1,22 @@
+set:
+  FirstValue: Text_${randomString()}
+  NewValue:   Text_${randomString()}
+
+JS tests:
+- url: local:demos/static_pages/ipsum.html
+- waitFor: {that: h2, eq: Header Level 2}
+- assert: {that: 'javascript(window.location.href)', endsWith: '/demos/static_pages/ipsum.html'}
+
+- echo: Changing DOM using JavaScript (async) and waiting 2 seconds - https://stackoverflow.com/a/13453935/954442
+- javascript async: 'document.getElementsByTagName("h2")[0].innerHTML="${FirstValue}"; window.setTimeout(arguments[arguments.length - 1], 2000);'
+- waitFor: {that: h2, eq: '${FirstValue}'}
+
+- echo: Changing DOM using JavaScript...
+- javascript: 'document.getElementsByTagName("h2")[0].innerHTML="${NewValue}";'
+- waitFor: {that: h2, eq: '${NewValue}'}
+
+- set RetrievedValue: javascript( document.getElementsByTagName("h2")[0].innerHTML )
+- assert: {that: '${RetrievedValue}', eq: '${NewValue}'}
+
+- echo: Logging JS lookup to console... should match `${NewValue}`
+- javascript log: document.getElementsByTagName("h2")[0].innerHTML

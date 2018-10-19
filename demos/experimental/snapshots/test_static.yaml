@@ -1,0 +1,44 @@
+browsers: chrome
+
+set:
+  ImgDir:  src/test/resources/Experimental/snapshots/images/
+  ImgPath: ${ImgDir}/x_${web:browserName()}
+
+################################################################
+Clean test:
+- url: local:demos/static_pages/ipsum.html
+- window: {width: 1024, height: 768}  # top: 0, left: 0, ...
+- snapshot: ${ImgPath}
+- snapshot accept: ${ImgPath}
+
+# No mismatch...
+- assert: {that: 'file(${ImgPath}.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}_actual.png).exists()', eq: false}
+- assert: {that: 'file(${ImgPath}_expected.png).exists()', eq: false}
+- assert: {that: 'file(${ImgPath}_diff.png).exists()', eq: false}
+
+################################################################
+Breaking test:
+- javascript: 'document.getElementsByTagName("h2")[0].style["background-color"]="red";'
+- delay: 500
+
+- snapshot: ${ImgPath}
+
+# Check both 'actual' and 'expected' exist, i.e. we had a mismatch...
+- assert: {that: 'file(${ImgPath}_actual.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}_expected.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}_diff.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}.png).exists()', eq: false}
+
+################################################################
+Re-snapshot (to check diffing):
+- snapshot: ${ImgPath}
+
+# Check both 'actual' and 'expected' exist, i.e. we had a mismatch...
+- assert: {that: 'file(${ImgPath}_actual.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}_expected.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}_diff.png).exists()', eq: true}
+- assert: {that: 'file(${ImgPath}.png).exists()', eq: false}
+
+- finally:
+    file:clean: ${ImgDir}

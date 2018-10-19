@@ -1,0 +1,9 @@
+browsers: {firefox}  # FF reliably handles element screenshots
+
+Simplest content validation:
+- url: local:demos/static_pages/ipsum.html
+- screenshot: FullScreen
+- screenshot: pre
+- screenshot: {of: h2}
+- screenshot: {as: NewFullScreenScreenshot}
+- screenshot: {of: h2, as: Header2Screenshot}

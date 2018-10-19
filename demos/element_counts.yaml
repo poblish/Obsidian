@@ -1,0 +1,8 @@
+browsers: {htmlunit}
+
+Counting tests:
+- url: local:demos/static_pages/news.html
+- assert: {that: count(p), eq: 11}
+- assert: {that: count(footer), eq: 1}
+- assert: {that: 'count(footer[role="xxx"])', eq: 0}
+- assert: {that: 'count(footer[role="contentinfo"])', eq: 1}

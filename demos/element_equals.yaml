@@ -1,0 +1,9 @@
+browsers: {htmlunit}
+
+Node equals test:
+- url: local:demos/static_pages/world_clock.html
+- waitFor: '#p0'
+- set AylesburyTime: '#p0'
+- assert: {that: '#p1', eq: '${AylesburyTime}'}  # Bath
+- assert: {that: '#p2', eq: '${AylesburyTime}'}  # Birmingham
+- assert: {that: '#p3', eq: '${AylesburyTime}'}  # Blackburn

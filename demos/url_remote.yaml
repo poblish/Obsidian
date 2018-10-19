@@ -1,0 +1,5 @@
+browsers: {chrome,firefox,safari,ie 11.0,edge}
+
+Simplest content validation:
+- url: http://www.w3.org/TR/html4/about.html
+- waitFor: {that: p, contains: Thanks to everyone who has helped to author the working drafts that went into the HTML 4 specification}

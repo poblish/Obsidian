@@ -1,0 +1,29 @@
+set:
+  initial: ${randomInt()}
+  x:       ${initial}
+
+Skip mutation of 'x', way 1:
+- skip:
+- set x: 0
+
+Skip mutation of 'x', way 2:
+- skip: true
+- set x: 0
+
+Skip mutation of 'x', way 3:
+- skip: yes
+- set x: 0
+
+Skip mutation of 'x', way 4:
+- skip: 1
+- set x: 0
+
+Check 'x' didn't get changed after all:
+- assert: {that: "${x}", eq: "${initial}"}
+
+Now, finally don't skip:
+- skip: FALSE
+- set x: 0
+
+Check 'x' finally did get changed:
+- assert: {that: "${x}", eq: 0}

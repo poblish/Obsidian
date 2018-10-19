@@ -1,0 +1,16 @@
+<html>
+<head>
+<script type="text/javascript">
+function confirmation() {
+  var answer = confirm("Leave site?")
+  if (answer) { alert("Bye bye!"); window.location = "ipsum.html"; }
+  else { alert("Thanks for sticking around!"); }
+}
+</script>
+</head>
+<body>
+<form>
+<input align="center" type="button" onclick="confirmation()" value="Leave site?" />
+</form>
+</body>
+</html>

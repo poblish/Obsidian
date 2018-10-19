@@ -1,0 +1,24 @@
+browsers: {htmlunit}
+
+Test extract & comparisons:
+- url: local:demos/static_pages/google_search_results.html
+
+- waitFor: '#resultStats'
+- set ResultCount: "extract('#resultStats', 'About (.*) results')"
+- set SearchTimeSecs: "extract('#resultStats', '\\((.*) seconds\\)')"
+- echo: ${ResultCount} results found in ${SearchTimeSecs} secs
+- assert: {that: '${ResultCount}', gt: 550000, lt: 1234567}
+- assert: {that: '${SearchTimeSecs}', gt: 0.03, lt: 1.5}
+
+# Test attr() syntax
+- assert: {that: 'attr(html).itemtype()', eq: 'http://schema.org/WebPage'}
+- assert: {that: "extract('attr(html).itemtype()','//(.*).org')", eq: schema}
+
+- set WholeId: attr('#resultStats').id()
+- set SearchTimeSecsById: "extract('#${WholeId}', '\\((.*) seconds\\)')"
+- assert: {that: '${SearchTimeSecs}', eq: '${SearchTimeSecsById}'}
+
+# Just to prove that extract() is *not* essential
+- set WholeIds: '#resultStats'
+- assert: {that: '${WholeIds}', eq: 'About 922,000 results (0.33 seconds)'}
+- assert: {that: '#resultStats', eq: 'About 922,000 results (0.33 seconds)'}

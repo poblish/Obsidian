@@ -1,0 +1,4 @@
+"accept-encoding": "gzip,deflate"
+},
+"method": "POST",
+"body": "<Envelope xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:c=\"http://www.niso.org/schemas/counter\">\n <Body>\n <ReportRequest xmlns=\"http://www.niso.org/schemas/sushi/counter\">\n <Requestor xmlns=\"http://www.niso.org/schemas/sushi\">\n <ID>[string]</ID>\n <Name>[string]</Name>\n <Email>[string]</Email>\n </Requestor>\n <CustomerReference xmlns=\"http://www.niso.org/schemas/sushi\">\n <ID>28060</ID>\n <Name>[string?]</Name>\n </CustomerReference>\n <ReportDefinition xmlns=\"http://www.niso.org/schemas/sushi\" Name=\"BR1\" Release=\"4\" />\n </ReportRequest>\n </Body>\n</Envelope>\n",

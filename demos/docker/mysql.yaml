@@ -1,0 +1,45 @@
+ns: {$: 'docker:', ^: 'jdbc:'}
+
+set:
+  MyName: Mr ${randomString()}
+  localPort: 3306
+  rootPassword: ${randomString()}
+
+Set up MySQL container:
+- $container: {image: "mariadb:10.2.18", env: ['MYSQL_ROOT_PASSWORD=${rootPassword}'], ports: ['${localPort}'], as: mySqlCtr}
+
+#################################################
+
+Test MySQL:
+
+# For simplicity, just work in the built-in DB
+- ^connect: {type: mysql, port: '${localPort}', database: mysql, user: root, pass: '${rootPassword}'}
+- waitFor: {that: '^select(version())', startsWith: '{version()=10.2.18-MariaDB', timeout: 30000}  # May take a few secs...
+
+- ^update:
+    CREATE TABLE account( user_id serial PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, email VARCHAR (355) UNIQUE NOT NULL, created_on TIMESTAMP NOT NULL )
+- ^update:
+    INSERT INTO account (username, password, email, created_on) VALUES ('${MyName}','Blah', 'a@b.com', CURRENT_TIMESTAMP)
+
+- assert:
+    that: ^select(SELECT username from account)
+    eq: '{username=${MyName}}'
+
+- assert: {that: '^select(EXPLAIN select * from account)', contains: 'select_type=SIMPLE'}
+
+- ^delete:
+    FROM account WHERE username='${MyName}'
+
+#################################################  Import from file:
+
+- ^load:
+    from: file:demos/docker/sql/accounts.sql
+    into: account
+
+- assert:
+    that: ^select(SELECT username from account)
+    eq: '{username=Andrew},{username=Bob},{username=Carol}'
+
+- finally:
+  - ^update:
+      DROP TABLE IF EXISTS account

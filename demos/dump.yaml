@@ -1,0 +1,4 @@
+Dump test:
+- url: local:demos/static_pages/linkedin.html
+- waitFor: head
+- dump: head meta

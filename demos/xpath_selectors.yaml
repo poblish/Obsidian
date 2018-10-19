@@ -1,0 +1,7 @@
+- url: local:demos/static_pages/ipsum.html
+- assert: {that: //h2, eq: Header Level 2}
+- assert: {that: '//h1/following-sibling::p/strong', eq: Pellentesque habitant morbi tristique}
+
+# Alternative syntax
+- assert: {that: xpath(//h2), eq: Header Level 2}
+- assert: {that: "xpath ( //p[@attr='main'] )", startsWith: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'}

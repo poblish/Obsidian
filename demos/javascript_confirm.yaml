@@ -1,0 +1,20 @@
+defaults: {click: {thenWait: 0}}
+
+Confirm test:
+- url: local:demos/static_pages/js_confirm.html
+# Click button to open dialog
+- click: input[value="Leave site?"]
+# Click OK on both new dialogs
+- alert close:
+- delay: 1000
+- alert close:
+
+# Check that we are now on Ipsum page
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}
+
+# Test our own alert
+- alert: Hello
+- delay: 1000
+- alert close:
+
+- assert: {that: p, contains: Pellentesque habitant morbi tristique}

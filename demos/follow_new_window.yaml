@@ -1,0 +1,45 @@
+defaults: {window: {width: 600, height: 400}}  # global default
+
+Tracl, follow, and resize popups:
+- url: http://www.popuptest.com/goodpopups.html
+
+- waitFor:
+    that: h1
+    eq: Not all popups are bad...
+
+# Resize just to show we can
+- window:
+    top: 100
+    left: 100
+    width: 500
+    height: 500
+
+- popup click: '@Good PopUp #2'
+- popup select:
+- waitFor:
+    that: body
+    with: bgcolor=#3D59AB
+- assert: body > div > img
+- popup select:  # Check this works twice
+- popup return:
+- popup select:  # Check this works twice
+
+# Now close it and return
+- window close:
+- popup return:  # Check this works twice
+
+# Try a different popup...
+- popup click: '@Good PopUp #3'
+- popup select:
+- waitFor:
+    that: body
+    with: bgcolor=#DB2645
+- window close:
+
+# Back to main window, last one standing
+- popup return:
+- waitFor:
+    that: h1
+    eq: Not all popups are bad...
+
+# Don't close remaining window, as that will close Driver too

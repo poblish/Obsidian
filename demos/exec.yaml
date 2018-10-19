@@ -1,0 +1,14 @@
+Simple execution:
+- echo: Get Java version...
+- exec: java -version
+
+Assert against stout/stderr:
+- assert: {that: exec(java -version).out(), eq: ''}
+
+- assert: {that: "${lastExec.out()}", eq: ''}
+- assert: {that: "${lastExec.err()}", contains: 'Java(TM) SE Runtime Environment'}
+- assert: {that: "${lastExec.result()}", eq: 0}
+
+Running another script and checking all scenarios ran:
+- assert: {that: exec(./local.sh demos/expressions.yaml).out(),
+           contains: {'Additional numeric comma-related tests', 'Validation functions'}}

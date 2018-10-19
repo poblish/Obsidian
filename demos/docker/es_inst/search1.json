@@ -1,0 +1,1 @@
+{"query": {"bool": {"must": {"match_all": {}}, "filter": {"term":{"test.path": "abcde" }}}}}

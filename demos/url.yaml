@@ -1,0 +1,43 @@
+browsers: htmlunit
+
+baseUrl: {url: 'local:demos/static_pages/ok_links.html',
+          # (Multiple) environment-specific overrides are supported...
+          or: [{url: 'http://foo-${env:property("needFooEnvt")}-envt.com',
+                when: '${env:hasProperty("needFooEnvt")}'}]}
+
+defaults: {waitFor: {timeout: 3000}}
+handlers: {demos/_url_handlers.yaml}
+
+##########################################
+
+Base Url and implicit loads:
+- waitFor: '~GoogleLink'  # Do something on the page to implicitly load baseUrl
+- assert: {that: url(), endsWith: /ok_links.html}
+
+- click: ~ipsum
+- waitFor: {that: url(), endsWith: /ipsum.html}
+- assert: h3
+- assert: not h4
+
+- url: ^
+- waitFor: {that: url(), endsWith: /ok_links.html}
+- assert: '~GoogleLink'
+
+
+Relative URL:
+- url: h1_h6_headers.html
+- waitFor: {that: url(), endsWith: /h1_h6_headers.html}
+- waitFor: {that: p, contains: Use h1 to h6 elements only for headings}
+
+- url: /h1_h6_headers.html
+- waitFor: {that: url(), endsWith: /h1_h6_headers.html}
+
+
+Absolute URL:
+- url: local:demos/static_pages/news.html
+- waitFor: {that: url(), endsWith: /news.html}
+
+##########################################
+
+^@BeforeScenario log new scenarios:
+- echo: '(Starting new scenario)'

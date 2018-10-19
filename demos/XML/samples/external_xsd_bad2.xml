@@ -1,0 +1,6 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<vehicles xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance">
+	<nickname>ABC</nickname>
+	<nickname>DEF</nickname>
+	<nickname>GHI</nickname>
+</xxx>

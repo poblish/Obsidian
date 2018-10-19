@@ -1,0 +1,11 @@
+browsers: htmlunit
+
+Test a page load, but with a pre- and a post-check:
+- initially:
+  - assert: {that: "url()", eq: 'about:blank'}
+
+- url: local:demos/static_pages/ipsum.html
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}
+
+- finally:
+  - assert: {that: "source()", contains: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit'}

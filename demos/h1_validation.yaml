@@ -1,0 +1,10 @@
+browsers: {htmlunit}
+
+Headers validation:
+- url: local:demos/static_pages/h1_h6_headers.html
+# Validate only *one* H1 on the page
+- assert: {that: 'source()', not matches: '<h1\b[^>]*>.*<h1'}
+# Validate H? tags do not appear out of order (within the parent in question)
+- assert: 'not h2 ~ h1, h3 ~ h1, h4 ~ h1, h5 ~ h1, h6 ~ h1, h3 ~ h2, h4 ~ h2, h5 ~ h2, h6 ~ h2, h4 ~ h3, h5 ~ h3, h6 ~ h3, h5 ~ h4, h6 ~ h4, h6 ~ h5'
+# FIXME Doesn't work, as 'h1 ~ h3' may ignore an intervening h2 and therefore be absolutely fine
+# - assert: 'not h1 ~ h3, h1 ~ h4, h1 ~ h5, h1 ~ h6, h2 ~ h4, h2 ~ h5, h2 ~ h6, h3 ~ h5, h3 ~ h6, h4 ~ h6'

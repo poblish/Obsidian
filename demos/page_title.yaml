@@ -1,0 +1,2 @@
+- url: local:demos/static_pages/ipsum.html
+- waitFor: {that: title(), eq: HTML Ipsum Page}

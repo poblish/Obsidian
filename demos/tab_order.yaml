@@ -1,0 +1,11 @@
+browsers: {chrome}
+
+Tabs:
+- url: local:demos/static_pages/linkedin.html
+  thenWait: 100
+- tab-order: {'#session_key-login','#session_password-login',
+              'a.forgot-pwd',
+              '#firstName-coldRegistrationForm',
+              '#lastName-coldRegistrationForm','#email-coldRegistrationForm','#password-coldRegistrationForm',
+              '#btn-submit','#first','#last',
+              '~search'}

@@ -1,0 +1,37 @@
+ns: {X: 'http:'}
+set:
+  Home: http://localhost:9877/
+  SecurityRealmProps: demos/jetty/jetty-realm.properties
+
+############################################
+Deploy a WAR:
+- jetty:config:
+    port: 9877
+    beans:
+    - type: org.eclipse.jetty.security.HashLoginService
+      name: LoginConfig
+      config: '${SecurityRealmProps}'
+
+- jetty:deploy: {from: demos/jetty/sample.war, to: /}
+- waitFor: {that: 'XGET(${Home}).content()', contains: '<h1>Sample "Hello, World" Application</h1>'}
+
+############################################
+Deploy a folder of static resources:
+- jetty:deploy: {from: demos/static_pages, to: /static}
+- waitFor: {that: 'XGET(${Home}/static/ipsum.html).content()', contains: Pellentesque habitant morbi tristique}
+
+# Extra 'last' test
+- waitFor: {that: '${lastReq.content()}', contains: Pellentesque habitant morbi tristique}
+
+# Extra 'source' test
+- waitFor: {that: '${lastReq.source()}', contains: '<p>Hidden text is here, youve been pwned!</p>'}
+
+# Final checks
+- assert: {that: '${lastReq.url()}', contains: static/ipsum.html}
+- assert: {that: '${lastReq.headers()}', contains: {'Content-Type: text/html', 'Content-Length: 1783'}}
+
+- waitFor: XGET(${Home}/static/ok_links.html)
+- waitFor: {that: 'XGET(${Home}/static/).content()', contains: ipsum.html}
+
+# Just check we didn't lose / mapping
+- waitFor: {that: 'XGET(${Home}).content()', contains: '<h1>Sample "Hello, World" Application</h1>'}

@@ -1,0 +1,14 @@
+browsers: {htmlunit}
+
+Link matching:
+- url: local:demos/static_pages/ok_links.html
+- assert: a[href='http://www.google.com']  # by CSS3 attr
+- assert: '~GoogleLink'  # by name attr
+- assert: '@Google'  # by text value
+- assert: '@*=Goo'  # by partial text match
+- assert: '@*=gle'  # by partial text match
+
+# Check 'special' characters are automatically handled
+- assert: '#prefix:download'
+- assert: '#prefix=download'
+- assert: '#prefix#download'

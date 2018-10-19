@@ -1,0 +1,8 @@
+browsers: chrome
+
+Meta tags test:
+- url: local:demos/static_pages/news.html
+- waitFor: {that: 'meta(x-audience).content()', eq: Domestic}
+- assert: {that: 'meta(application-name).content()', eq: BBC News}
+- assert: {that: 'meta(twitter:site).content()', eq: '@BBCNews'}
+- assert: {that: 'meta(viewport).content()', eq: 'width=device-width, initial-scale=1.0,width=device-width, initial-scale=1, user-scalable=1'}  # (!!)

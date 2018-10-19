@@ -1,0 +1,32 @@
+browsers: {htmlunit}
+
+set:
+  Var: Hello
+  Home: http://localhost:9877/static
+
+Set up HTTP first:
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/static_pages, to: /static}
+
+Echo capablities:
+- echo: 'Goodbye'
+- echo: '${Var} and welcome'
+- echo: 3.141592653589
+# - echo: 'Bye again ${Missing var}'  # Will fail
+
+- url: http://localhost:9877/static/ipsum.html
+- waitFor: {that: p, contains: Pellentesque habitant morbi tristique}
+- echo: h3
+
+- echo: 'Attempting to log H1 line-height:'
+- echo: css(h1).line-height()
+
+- echo: Log some HTTP results...
+- echo: http:get(${Home}).status()
+- echo: http:get(${Home}/ipsum.html).statusLine()
+
+#- echo: 'This time log the whole status line...'
+#- echo: http:get(http://www.google.com).statusLine()
+
+- echo: 'Pull some JSON... (should say "bannedList-Plugin,obsidian-atom")'
+- echo: json(${Home}/repos.json).nodes($.[0,2].name)

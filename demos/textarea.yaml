@@ -1,0 +1,43 @@
+browsers: {htmlunit}
+
+Textarea test:
+- url: local:demos/static_pages/inputs.html
+- waitFor: {that: '#blah', eq: Hello}
+
+# Extra checks, just for fun
+- assert: attr(#blah).enabled()
+- assert: attr(#blah).displayed()
+- assert: attr(#blah).editable()
+
+# Test extract() on the contents
+- assert: {that: "extract('#blah', 'H(.*)o')", eq: ell}
+
+# Clear the <textarea> and check it's clear
+- type: ''
+  in: '#blah'
+- assert: {that: '#blah', eq: ""}
+
+# Check extract() works with blank value
+- set Middle: extract('#blah', '(.*)')
+- echo: '!${Middle} ... should be blank'
+- echo: '${Middle} ... should also be blank'
+- assert: {that: '${Middle}', eq: ''}
+
+# Bonus blank-checks
+- assert: {that: '', eq: ''}
+- assert: {that: , eq: ''}
+
+# One final check
+- type: '123'
+  in: '#blah'
+- assert: {that: '#blah', eq: 123}
+
+# Clear the <textarea> another way
+- clear: '#blah'
+- assert: {that: '#blah', eq: ""}
+
+# Negative tests:
+- assert: not attr(h1).editable()
+- assert: not attr(#disabled).editable()
+- assert: not attr(#disabled).enabled()
+- assert: not attr(#readonly).editable()

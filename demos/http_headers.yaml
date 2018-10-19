@@ -1,0 +1,51 @@
+ns: {X: 'http:'}
+
+baseUrl: http://www.google.co.uk
+
+########################################
+
+Absolute URLs:
+- debug: asserts
+- assert: XGET(http://www.google.co.uk)
+
+# Echo headers etc.
+- echo: ${lastReq}
+
+- set ExecTime: ${lastReq.time('execute')}
+- set SendTime: ${lastReq.time('send')}
+- set RecvTime: ${lastReq.time('receive')}
+
+- assert: {that: '${ExecTime}', gt: 20}
+- assert: {that: '${SendTime}', gte: 0}
+- assert: {that: '${RecvTime}', gt: 20}
+
+- echo: 'Timings... Exec: ${ExecTime} millis: [Send: ${SendTime} millis, Receive: ${RecvTime} millis]'
+
+- assert: {that: 'extract( ${lastReq.content()}, "<title>(.*)</title>")', eq: Google}
+
+# Bit pointless: 'ignore' strips from both actual and expected, and we already know this will pass
+- assert: {that: 'extract( ${lastReq.content()}, "<title>(.*)</title>")', eq: Google, ignore: Goo}
+- assert: {that: 'extract( ${lastReq.content()}, "<title>(.*)</title>")', eq: Google, ignore: {Goo,Apple}}
+
+# Test the whole thing...
+- assert: {that: '${lastReq.header("Content-Type")}', eq: text/html; charset=ISO-8859-1}
+
+# ...or use this syntax:
+- assert: {that: "extract( ${lastReq.header('Content-Type')}, '(.*);')", eq: text/html}
+- assert: {that: "extract( ${lastReq.header('Content-Type')}, 'charset=(.*)')", eq: ISO-8859-1}
+
+- assert: {that: "${lastReq.header('xxsdasd')}", eq: ''}
+
+########################################
+
+Relative URLs (simple):
+- assert: XGET(/)
+- assert: {that: "extract( ${lastReq.content()}, '<title>(.*)</title>')", eq: Google}
+
+########################################
+
+Relative URLs (also User-Agent):
+- assert: 'XGET( /, ua: Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16)'
+
+# Can't actually *prove* that the UA was accepted - oh well.
+- assert: {that: "extract( ${lastReq.content()}, '<title>(.*)</title>')", eq: Google}

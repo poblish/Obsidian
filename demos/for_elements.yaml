@@ -1,0 +1,14 @@
+browsers: htmlunit
+
+set:
+  combined: Combined text >
+
+Loop through elements:
+- url: local:demos/static_pages/ok_links.html
+
+- for: {p, h1, '#download'}
+-  set text: attr(~).text()
+-  set combined: '!${combined} | ${text}'
+- next:
+
+- assert: {that: '!${combined}', eq: Combined text > | Google | HTML Ipsum Presents | Download}

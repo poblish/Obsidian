@@ -1,0 +1,9 @@
+ns: {$: 'docker:'}
+
+Set up HelloWorld container:
+# Add JAVA_OPTS to prevent https://github.com/docker-library/tomcat/issues/12 etc.
+- docker:container: {image: 'tomcat:8-jre8', ports: [8080], env: ['JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"']}
+- waitFor: {that: 'http:get(http://localhost:8080).content()',
+    matches: 'Apache Tomcat/8.[0-9].[0-9]*',
+    contains: "If you're seeing this, you've successfully installed Tomcat. Congratulations!"}
+- echo: Checked and ready to shut down

@@ -1,0 +1,8 @@
+# Include file from the same directory
+
+- include: _setter_incl.yaml
+- assert: {that: "${x}", eq: 1}
+
+- set x: 12312
+- include: _setter_incl.yaml
+- assert: {that: "${x}", eq: 1}

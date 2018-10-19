@@ -1,0 +1,6 @@
+ns: {^: 'jasmine:'}
+
+Jasmine runner:
+- ^run: demos/jasmine/jsTestProject/SpecRunner.html
+- assert: {that: ^passed(), eq: 1}
+- assert: {that: ^failed(), eq: 0}

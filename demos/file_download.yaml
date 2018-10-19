@@ -1,0 +1,20 @@
+set:
+  Home: http://localhost:9877
+
+# FIXME Should make a better test e.g. using HAR analysis
+
+Deploy a folder of static resources for HTTP:
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/static_pages, to: /static}
+
+- url: "${Home}/static/ok_links.html"
+- waitFor: "#download"
+# Don't actually click
+
+# Work out what the download is...
+- set link: "attr( #download ).href()"
+- set fullName: ${link}  # Should be superfluous
+- set fileName: "extract( ${fullName}, '/([^/]*)$')"
+
+# ... HTTP-get it, and check the GET matches what it should have been
+- waitFor: {that: 'http:GET(${link}).content()', equals: {'file:demos/static_pages/${fileName}', 'Hello, Wold!'}}

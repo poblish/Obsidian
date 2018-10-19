@@ -1,0 +1,39 @@
+defaults: {select: {thenWait: 0}}
+
+set:
+  Sel: select[name='cars']
+
+Select dropdown demo:
+- url: local:demos/static_pages/select.html
+- switchTo: '#iframeResult'
+- waitFor: {that: '${Sel}', eq: ''}
+- assert: 'not attr(${Sel}).selected()'
+
+- select: ${Sel}
+  by label: Volvo
+- assert: {that: '${Sel}', eq: 'Volvo'}
+
+- select: ${Sel}
+  by label: Opel
+- assert: {that: '${Sel}', eq: 'Volvo,Opel'}
+
+- select: ${Sel}
+  remove label: Volvo
+- assert: {that: '${Sel}', eq: Opel}
+
+- select: ${Sel}
+  remove label: Saab
+- assert: {that: '${Sel}', eq: Opel}
+
+- select: ${Sel}
+  by label: Saab
+- assert: {that: '${Sel}', eq: 'Saab,Opel'}
+
+- select: ${Sel}
+  remove all:
+- assert: {that: '${Sel}', eq: ''}
+
+
+Ignore missing frames:
+- switchTo: '#nonExistent'
+  ignoreErrors: true

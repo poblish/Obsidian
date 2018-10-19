@@ -1,0 +1,25 @@
+set:
+  n: 30
+  count: 0
+
+Test:
+- threads:submit: {run: myMethod}  # once only
+- threads:submit: {threads: {core: 5, max: 10}, run: myMethod, times: '${n}', finallyRun: OnCompletion}
+- threads:schedule: {delay: 2 secs, run: myMethod, every: 1 secs, for: 5 seconds, finallyRun: OnCompletion}  # Fixed-rate
+- threads:schedule: {threads: 4, delay: 500 msecs, run: myMethod, delayEvery: 1 secs, times: 5, finallyRun: OnCompletion}  # Fixed-delay
+- assert: {that: '${count}', eq: 41}
+
+# threads: int or Map (core, max)
+# delay: parse time val, default: 0. 'schedule' only
+# every: parse time val, REQUIRED. 'schedule' only
+# delayEvery: parse time val, REQUIRED. 'schedule' only
+# for: parse time val, else 1 time. 'schedule' only, else use 'times'
+# times: int, default: 1
+# run: REQUIRED
+# finallyRun: BLOCK until all done if not set
+# Add: onError: {restart, fail, ignore}, default: fail
+
+##############################################
+
+^myMethod():
+- echo: 'Here #${inc("count")} - [${thread()}]'

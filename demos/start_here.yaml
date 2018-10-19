@@ -1,0 +1,17 @@
+# Demonstrates how the "here" command can be used to start scenarios part-way through
+
+Scenario 1:
+- assert:
+    that: 1
+    eq: 2
+- here:
+- echo: Skipped an assert that's not ready to pass
+
+Scenario 2:
+- echo: Another scenario
+- echo: is here
+- assert:
+      that: 2
+      eq: 1
+- here:
+- echo: Skipped another failing assert

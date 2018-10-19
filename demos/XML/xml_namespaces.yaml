@@ -1,0 +1,20 @@
+xmlns: {xsi: 'http://www.w3.org/2001/XMLSchema-instance'}  # For XPath
+
+Test namespace mappings:
+- assert: {that: '${obsidian_xmlns.namespaceURI("xsi")}', eq: 'http://www.w3.org/2001/XMLSchema-instance'}
+- assert: {that: '${obsidian_xmlns.prefix("http://www.w3.org/2001/XMLSchema-instance")}', eq: xsi}
+- assert: {that: '${obsidian_xmlns.prefixes("http://www.w3.org/2001/XMLSchema-instance")}', eq: xsi}
+
+Negative matches:
+- assert: {that: '${obsidian_xmlns.prefix("xxx")}', eq: ''}
+- assert: {that: '${obsidian_xmlns.prefixes("xxx")}', eq: ''}
+
+###########################################################################
+
+XPath with NS:
+
+# Now test string input... also use full NS syntax
+- assert: {that: 'xml(<?xml version="1.0" encoding="UTF-8"?>
+<xsi:shiporder orderid="889923" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="demos/XML/samples/sample.xsd">
+  <xsi:orderperson>Mr Blah</xsi:orderperson>
+</xsi:shiporder>  ).node(//xsi:orderperson)', eq: Mr Blah}

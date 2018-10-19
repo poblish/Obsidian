@@ -1,0 +1,40 @@
+ns: {^: 'docker:', $: 'redis:'}
+
+set:
+  TestKey1: MyKey_${randomString()}
+  TestKey2: MyKey_${randomString()}
+  TestVal:  MyVal_${randomString()}_101
+
+Set up redis container:
+- ^container: {image: 'redis:latest', ports: [6379]}
+- delay: 500  # Should be plenty of time for port to open...
+
+Redis Test 1:
+- $envt:  # localhost, port: 6379
+
+# Clear + check empty...
+- $clear:
+- assert: {that: $keys(), eq: ''}
+
+- $set: {key: '${TestKey1}', value: '${TestVal}'}
+- assert: {that: '$get(${TestKey1})', eq: '${TestVal}'}
+- assert: {that: '$get(${TestKey2})', eq: '<empty>'}
+
+- $set: {key: '${TestKey2}', value: ''}
+- assert: {that: '$get(${TestKey1})', eq: '${TestVal}'}
+- assert: {that: '$get(${TestKey2})', eq: ''}
+
+- assert: {that: $keys(), contains: {'${TestKey1}', '${TestKey2}'}}  # Can't rely on order, so check indiv elements
+
+# Check delete works...
+- $delete: {key: '${TestKey1}'}
+- assert: {that: '$get(${TestKey1})', eq: '<empty>'}
+
+- assert: {that: $keys(), eq: '${TestKey2}'}  # Down to 1...
+
+# Clear + check empty...
+- $clear:
+- assert: {that: $keys(), eq: ''}
+
+- finally:
+  - $delete: {key: '${TestKey2}', optional:}

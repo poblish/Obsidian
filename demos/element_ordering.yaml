@@ -1,0 +1,8 @@
+browsers: {htmlunit}
+
+Counting tests:
+- url: local:demos/static_pages/ipsum.html
+- assert: {that: 'ordering(body, h2, h3)', eq: before}
+- assert: {that: 'ordering(body, h3, h2)', eq: after}
+- assert: {that: 'ordering("body", "h3", "h2")', eq: after}
+- assert: {that: "ordering('body', 'h2', 'h2')", eq: same}

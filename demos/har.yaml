@@ -1,0 +1,31 @@
+proxy:
+profile:chrome:   # Vanilla Chrome options, headless doesn't seem to work with Proxy
+browsers: chrome  # Chrome only, since Firefox doesn't seem to work with Proxy and localhost (non-LH fine)
+
+set:
+  GAPattern: google-analytics.com/.*/collect
+
+HAR test:
+- har start:
+- url: https://fonts.google.com/about
+- har copy:
+- har dump:
+- assert: {that: 'har_entry( ${GAPattern} ).query(dt)', eq: Google Fonts}
+- assert: {that: 'har_entry( ${GAPattern} ).query(t)', eq: pageview}
+- assert: {that: 'har_entry( ${GAPattern} ).query(tid)', eq: UA-24053025-2}
+
+# Response headers...
+- assert: {that: 'har_entry( ${GAPattern} ).response-header(Access-Control-Allow-Origin)', eq: '*'}
+- assert: {that: 'har_entry( ${GAPattern} ).response-header(Content-Type)', eq: image/gif}
+
+# Overall timing elements...
+- assert: {that: 'har_page().time(onload)', gt: 1000, lt: 9000}
+
+# Individual timing elements...
+- assert: {that: 'har_entry( ${GAPattern} ).time(blocked)', lt: 2}
+- assert: {that: 'har_entry( ${GAPattern} ).time(connect)', lt: 100}
+- assert: {that: 'har_entry( ${GAPattern} ).time(dns)', lt: 100}
+- assert: {that: 'har_entry( ${GAPattern} ).time(ssl)', lt: 100}
+- assert: {that: 'har_entry( ${GAPattern} ).time(receive)', gte: 0, lt: 1000}
+- assert: {that: 'har_entry( ${GAPattern} ).time(send)', gte: 0, lt: 1000}
+- assert: {that: 'har_entry( ${GAPattern} ).time(wait)', gt: 0, lt: 1000}

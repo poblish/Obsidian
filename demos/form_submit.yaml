@@ -1,0 +1,16 @@
+Login and logout:
+- url: https://the-internet.herokuapp.com/login
+
+- type: tomsmith
+  in: ~username
+
+- type: SuperSecretPassword!
+  in: ~password
+
+- submit: form
+
+- waitFor: {that: h4, eq: Welcome to the Secure Area. When you are done click logout below.}
+
+- click: .icon-signout
+
+- waitFor: {that: h2, eq: Login Page}

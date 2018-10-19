@@ -1,0 +1,38 @@
+ns: {X: 'http:'}
+defaults: {waitFor: {timeout: 60000}}  # Just in case ES is *really* slow to start...
+
+set:
+  EsAPI: http://localhost:9200
+  IdxName: idx_${randomString()}
+  Type: myType
+
+Set up ES container:
+- docker:container: {image: 'elasticsearch:5.6', ports: [9200],
+    binds: [  # Not actually required here
+        # {container: '/usr/share/elasticsearch/config', local: ~/Documents/Eclipse/obsidian/demos/docker/es_inst/config},  # FIXME Need *relative* path!
+        # {container: '/usr/share/elasticsearch/data', local: ~/Documents/Eclipse/obsidian/demos/docker/es_inst/data}  # FIXME Need *relative* path!
+      ]
+    }
+
+Validate ES:
+# Wait until up...
+- waitFor: {that: 'XGET(${EsAPI}).content()', contains: {'5.6','You Know, for Search'}}
+
+# Create index...
+- waitFor: XPUT(${EsAPI}/${IdxName})
+
+# Put mappings...
+- waitFor: {that: 'XPUT(to: ${EsAPI}/${IdxName}/_mapping/${Type}, file:demos/docker/es_inst/mappings.json).content()', eq: '{"acknowledged":true}'}
+
+# Index something...
+- waitFor: {that: 'XPUT(to: ${EsAPI}/${IdxName}/${Type}/1, file:demos/docker/es_inst/index.json).content()',
+            contains: '{"_index":"${IdxName}","_type":"${Type}","_id":"1"'}
+
+# Return something...
+- waitFor: {that: 'XGET(${EsAPI}/${IdxName}/${Type}/1).content()', contains: {'abcde', 'sdfdsdfdsf'}}
+
+# Search something...
+- delay: 1000
+- set Json: 'XGET(to: ${EsAPI}/${IdxName}/${Type}/_search, file:demos/docker/es_inst/search1.json).content()'
+# Just an example... obviously there are better ways of checking! Use JEST for starters...
+- assert: {that: 'json(${Json}).node( hits.hits[0]._source.test.path )', eq: "abcde"}

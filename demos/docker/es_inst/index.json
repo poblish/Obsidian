@@ -1,0 +1,26 @@
+{
+    "operator": {
+        "name": "Andrew",
+        "tags": [
+            "QA",
+            "TL"
+        ]
+    },
+    "env": {
+        "branch": "develop"
+    },
+    "test": {
+        "name": "Login",
+        "path": "abcde",
+        "checksum": "sdfdsdfdsf",
+        "tags": [
+            "QA",
+            "Regression"
+        ]
+    },
+    "test_result": {
+        "pass": false,
+        "status": "failed",
+        "message": "big error"
+    }
+}

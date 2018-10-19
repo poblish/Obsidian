@@ -1,0 +1,73 @@
+set:
+  BaseDir: file:demos/XML/samples
+  ExampleUrl: http://localhost:9877/samples/sample.xml
+
+###########################################################################
+
+Expose all our samples as static resources over HTTP:  # A lot faster than keep hammering the web
+- jetty:config: {port: 9877}
+- jetty:deploy: {from: demos/XML/samples/, to: /samples}
+
+###########################################################################
+
+XPath:
+# Test file input
+- assert: {that: 'xml( ${BaseDir}/sample.xml ).node(//city)', eq: 4000 Stavanger}
+
+# Now test web lookup...
+- assert: {that: 'xml(${ExampleUrl}).node(//name)', eq: Ola Nordmann}
+- assert: {that: 'xml(${ExampleUrl}).string(//shipto/country)', eq: Norway}  # NB. a string value, not the text content of a matched node
+- assert: {that: 'xml(${ExampleUrl}).count(//item/title)', eq: 2}
+- assert: {that: 'xml(${ExampleUrl}).count(//JUNK/XXXX)', eq: 0}
+- assert: {that: 'xml(${ExampleUrl}).nodes(/shiporder/item/title)', eq: 'Hide your heart,Empire Burlesque'}
+- assert: {that: 'xml(${ExampleUrl}).nodesSorted(/shiporder/item/title)', eq: 'Empire Burlesque,Hide your heart'}
+
+###########################################################################
+
+Re-test last XML without further downloads:
+- assert: {that: '${lastXml.string("//orderperson")}', eq: John Smith}
+- assert: {that: '${lastXml.node("//name")}', eq: Ola Nordmann}
+- assert: {that: '${lastXml.nodes("/shiporder/item/title")}', eq: 'Hide your heart,Empire Burlesque'}
+- assert: {that: '${lastXml.nodesSorted("/shiporder/item/title")}', eq: 'Empire Burlesque,Hide your heart'}
+- assert: {that: '${lastXml.count("//item/title")}', eq: 2}
+- assert: ${lastXml.validate()}
+
+###########################################################################
+
+Vaidation:
+# Validate using internal XSD
+- assert: xml( ${BaseDir}/sample.xml ).validate()
+# Do the same for XML on the web...
+- assert: xml(${ExampleUrl}).validate()
+
+# Now test string input...
+- assert: 'xml(<?xml version="1.0" encoding="UTF-8"?>
+  <shiporder orderid="889923" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="demos/XML/samples/sample.xsd">
+    <orderperson>John Smith</orderperson>
+      <shipto>
+        <name>Ola Nordmann</name><address>Langgt 23</address><city>4000 Stavanger</city><country>Norway</country>
+      </shipto>
+      <item><title>Empire Burlesque</title><note>Special Edition</note><quantity>1</quantity><price>10.90</price></item>
+      <item><title>Hide your heart</title><quantity>1</quantity><price>9.90</price></item>
+  </shiporder>).validate()'
+
+# Submit an XML-based HTTP request
+- assert: http:get(${ExampleUrl})
+# Now re-test last request...
+- assert: xml( ${lastReq.content()} ).validate()
+
+# Test something broken
+- assert: {that: 'xml( ${BaseDir}/sample_broken1.xml ).validate()',
+           contains: 'The element type "shiporder" must be terminated by the matching end-tag "</shiporder>"'}
+
+# Validate using external Schema
+- assert: {that: 'xml( ${BaseDir}/external_xsd.xml ).validate()',
+           eq: "**** ERROR: cvc-elt.1.a: Cannot find the declaration of element 'vehicles'."}
+
+- assert: xml( ${BaseDir}/external_xsd.xml ).validate( ${BaseDir}/external_xsd.xsd )
+
+- assert: {that: 'xml( ${BaseDir}/external_xsd_bad1.xml ).validate( ${BaseDir}/external_xsd.xsd )',
+           eq: "**** ERROR: cvc-complex-type.2.4.a: Invalid content was found starting with element 'name'. One of '{nickname}' is expected."}
+
+- assert: {that: 'xml( ${BaseDir}/external_xsd_bad2.xml ).validate( ${BaseDir}/external_xsd.xsd )',
+           eq: 'The element type "vehicles" must be terminated by the matching end-tag "</vehicles>".'}

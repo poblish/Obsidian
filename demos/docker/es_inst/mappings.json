@@ -1,0 +1,42 @@
+{
+    "myType": {
+        "properties": {
+            "test_result": {
+                "type": "nested",
+                "include_in_parent": true,
+                "properties": {
+                    "pass": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "operator": {
+                "type": "nested",
+                "include_in_parent": true,
+                "properties": {
+                    "name": {
+                        "type": "text",
+                        "store": true,
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            "test": {
+                "type": "nested",
+                "include_in_parent": true,
+                "properties": {
+                    "path": {
+                        "type": "text",
+                        "store": true,
+                        "index": "not_analyzed"
+                    },
+                    "checksum": {
+                        "type": "text",
+                        "store": true,
+                        "index": "not_analyzed"
+                    }
+                }
+            }
+        }
+    }
+}

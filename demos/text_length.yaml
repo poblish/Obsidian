@@ -1,0 +1,6 @@
+browsers: {htmlunit}
+
+Length test:
+- url: local:demos/static_pages/ipsum.html
+- waitFor: {that: 'text_length(h1)', eq: 19}
+- assert: {that: 'text_length(p[attr="main"])', eq: 300}
