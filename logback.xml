@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%X{driver}%X{line}] %highlight(%-5level) %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.hiatusuk" level="DEBUG"/>
+    <logger name="org.apache.http" level="WARN"/>
+    <logger name="com.codahale.metrics.httpclient" level="INFO"/>
+    <logger name="com.gargoylesoftware.htmlunit" level="INFO"/>
+    <logger name="com.gargoylesoftware.htmlunit.html" level="ERROR"/>
+    <logger name="com.gargoylesoftware.htmlunit.javascript" level="off"/>
+    <logger name="com.gargoylesoftware.htmlunit.DefaultCssErrorHandler" level="ERROR"/>
+    <logger name="com.gargoylesoftware.htmlunit.IncorrectnessListenerImpl" level="ERROR"/>
+    <logger name="org.openqa.selenium.safari" level="WARN"/>
+    <logger name="org.openqa.selenium.phantomjs.PhantomJSDriverService" level="WARN"/>
+
+	<!-- JsonPath stuff -->
+    <logger name="com.jayway.jsonpath" level="INFO"/>
+
+	<!-- BrowserMob stuff -->
+    <logger name="net.lightbody.bmp" level="WARN"/>
+    <logger name="net.sf.uadetector" level="WARN"/>
+    <logger name="org.littleshoot.proxy" level="WARN"/>
+
+	<!-- Reflections -->
+    <logger name="org.reflections" level="WARN"/>
+
+	<!-- AWS / S3 -->
+    <logger name="com.amazonaws" level="INFO"/>
+
+	<!-- Jetty -->
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="org.eclipse.jetty.server.Server" level="INFO"/>
+    <logger name="org.eclipse.jetty.server.handler" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.log" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.thread" level="error"/>
+    <logger name="org.eclipse.jetty.webapp.StandardDescriptorProcessor" level="WARN"/>
+
+    <!-- Docker -->
+    <logger name="com.spotify.docker" level="INFO"/>
+    <logger name="com.spotify.docker.client.LoggingPullHandler" level="warn"/>
+    <logger name="org.testcontainers" level="info"/>
+    <logger name="com.github.dockerjava" level="info"/>
+
+    <!-- WireMock -->
+    <logger name="wiremock.org.eclipse" level="warn"/>
+
+    <!-- Root Logger -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
