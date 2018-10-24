@@ -34,6 +34,8 @@ possible to validate all `<p>` on a page, only those a tester defines.
 
 ## No parallel running of test scenarios
 
-This is not forbidden, but there are many ways to parallelise a test run, and you may well prefer to split jobs
+~~This is not forbidden, but there are many ways to parallelise a test run, and you may well prefer to split jobs
 across different runners / agents for cleaner separation, rather than within a test framework runner like Obsidian
-itself. However, this may change.
+itself. However, this may change.~~
+
+This is now supported via `--parallelThreads=n` (25 Oct 2018)
