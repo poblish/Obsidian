@@ -29,20 +29,30 @@ Additional numeric comma-related tests:
 - assert: {that: 29853, eq: '${count - 3}'}
 - assert: {that: '${count - 3}', eq: 29853}
 - assert: {that: '${count - 3.1}', eq: 29852.9}
-- set val: 3.14159
-- assert: {that: '${val - 3.05}', gte: 0.09159, lt: 0.0915901}
+- set pi: 3.14159
+- assert: {that: '${pi - 3.05}', gte: 0.09159, lt: 0.0915901}
 - set longVal: 93214748323647
 - assert: {that: '${longVal + 18181}', eq: 93214748341828}
 
 Additional functions:
 - assert: {that: '${web:browserName()}', anyOf: {No-op, '???'}}
 
-Increment and decrement:
+Increment and decrement A:
 - assert: {that: '${b}', eq: 1979}
 - inc: b
 - assert: {that: '${b}', eq: 1980}
 - dec: b
 - assert: {that: '${b}', eq: 1979}
+
+Increment and decrement B:
+- assert: {that: '${inc("b")}', eq: 1980}
+- assert: {that: '${dec("b")}', eq: 1979}
+- set pi: 3.14159
+- assert: {that: '${inc("pi")}', eq: 4.14159}
+- assert: {that: '${dec("pi")}', eq: 3.14159}
+- set commas: 1,000
+- assert: {that: '${inc("commas")}', eq: 1001}
+- assert: {that: '${dec("commas")}', eq: 1000}
 
 Validation functions:
 - assert: ${commons:validate("CreditCard", 4556071143190644)}  # Short form
