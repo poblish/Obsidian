@@ -1,0 +1,30 @@
+package org.hiatusuk.obsidian.web.selenium.lookup
+
+import org.hiatusuk.obsidian.asserts.AssertTarget
+import org.hiatusuk.obsidian.asserts.lookups.AssertLookup
+import org.hiatusuk.obsidian.asserts.lookups.LookupUtils
+import org.hiatusuk.obsidian.di.ScenarioScope
+import org.hiatusuk.obsidian.run.exceptions.RuntimeExceptions
+import org.hiatusuk.obsidian.web.selenium.find.ElementFinders
+import java.util.regex.Pattern
+import javax.inject.Inject
+
+@AssertLookup("count\\(")
+@ScenarioScope
+class ElementCountLookups @Inject
+internal constructor(private val finders: ElementFinders, private val exceptions: RuntimeExceptions) {
+
+    fun lookup(targetIdentifier: String): Collection<AssertTarget> {
+        val m = COUNT_HANDLER_PATTERN.matcher(targetIdentifier)
+        if (!m.find()) {
+            throw exceptions.runtime("Malformed Assert: $targetIdentifier")
+        }
+
+        return LookupUtils.singleTarget(finders.with(m.group(1)).count())
+    }
+
+    companion object {
+
+        private val COUNT_HANDLER_PATTERN = Pattern.compile("count" + "\\((.*)\\)", Pattern.CASE_INSENSITIVE)
+    }
+}
