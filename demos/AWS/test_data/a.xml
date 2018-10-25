@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE WileyML3G [<!ENTITY % wileyml3g.ent SYSTEM "http://v.wiley.com:3535/dtds/wileyml3g/wiley.ent"> %wileyml3g.ent; ]>
-<component xmlns="http://www.wiley.com/namespaces/wiley" xml:lang="en" version="2.0" xml:id="a01" type="bookChapter">
-    <header>
-        <publicationMeta level="product">
-            <publisherInfo>
-                <publisherName>John Wiley &amp; Sons, Inc.</publisherName>
-                <publisherLoc>Hoboken, NJ, USA</publisherLoc>
-            </publisherInfo>
-        </publicationMeta>
-    </header>
-</component>
+<foo>
+    <a>
+        <b>Xyx</b>
+        <c>ABC</c>
+    </a>
+</foo>

@@ -21,16 +21,16 @@ Simplistic AWS S3 Bucket assertions:
 # Can't get expiry to work...
 - assert: {that: 's3.bucket(${TestBucket}).keys()', eq: '${KeyName}'}
 - assert: {that: 's3.bucket(${TestBucket}).contents()', eq: 'file:${Path1}'}
-- assert: {that: 's3.bucket(${TestBucket}).etags()', eq: 8c073256166f40bfb0c529f121ace43a}
-- assert: {that: 's3.bucket(${TestBucket}).sizes()', eq: 584}
+- assert: {that: 's3.bucket(${TestBucket}).etags()', eq: 95cab3567c0f3e814a8c8d24efbf85db}
+- assert: {that: 's3.bucket(${TestBucket}).sizes()', eq: 107}
 - assert: {that: 's3.bucket(${TestBucket}).count()', eq: 1}
-- assert: {that: 's3.bucket(${TestBucket}).list()', startsWith: '{key=${KeyName}, etag=8c073256166f40bfb0c529f121ace43a, bytes=584, lastMod='}
+- assert: {that: 's3.bucket(${TestBucket}).list()', startsWith: '{key=${KeyName}, etag=95cab3567c0f3e814a8c8d24efbf85db, bytes=107, lastMod='}
 
 - $put: {file: '${Path2}', bucket: '${TestBucket}', as: '${Key2}'}
-- assert: {that: 's3.bucket(${TestBucket}).keys()', eq: '${Key2},${KeyName}'}
+- assert: {that: 's3.bucket(${TestBucket}).keys()', contains: {'${Key2}','${KeyName}'}}
 - assert: {that: 's3.bucket(${TestBucket}).contents()', contains: {'file:${Path1}', 'file:${Path2}'}}
-- assert: {that: 's3.bucket(${TestBucket}).etags()', eq: 'd19308483a72bd959c9c26d82af2e542,8c073256166f40bfb0c529f121ace43a'}
-- assert: {that: 's3.bucket(${TestBucket}).sizes()', eq: '15,584'}
+- assert: {that: 's3.bucket(${TestBucket}).etags()', contains: {'d19308483a72bd959c9c26d82af2e542','95cab3567c0f3e814a8c8d24efbf85db'}}
+- assert: {that: 's3.bucket(${TestBucket}).sizes()', contains: {15,107}}
 - assert: {that: 's3.bucket(${TestBucket}).count()', eq: 2}
 
 finally:
