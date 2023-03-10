@@ -1,11 +1,11 @@
 package org.hiatusuk.obsidian
 
-import org.hiatusuk.obsidian.di.component.DaggerApplicationComponent
+import org.hiatusuk.obsidian.di.component.DaggerRunnerComponent
 import org.hiatusuk.obsidian.run.RunInputs
 import org.hiatusuk.obsidian.run.RunProperties
+import org.junit.jupiter.api.Test
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.testcontainers.containers.BrowserWebDriverContainer
-import org.testng.annotations.Test
 import java.io.File
 import java.util.*
 
@@ -26,8 +26,8 @@ class SeleniumGridIntegrationTest {
             props.setDefaultDesiredCapabilities(caps)
             props.isLogMetrics = true
 
-            DaggerApplicationComponent.builder().runWith(props).build().scenarioRunner.use { r ->
-                r.setInputs(RunInputs( File("demos/google.yaml")) )
+            DaggerRunnerComponent.builder().props(props).build().scenarioRunner.use { r ->
+                r.inputs = RunInputs( File("demos/google.yaml"))
                 r.start()
             }
         }

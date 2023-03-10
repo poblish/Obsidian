@@ -13,14 +13,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
         <selenium.version>3.14.0</selenium.version>
-        <dagger.version>2.18</dagger.version>
-        <jetty.version>9.4.12.v20180830</jetty.version>
+        <dagger.version>2.45</dagger.version>
+        <jetty.version>9.4.48.v20220622</jetty.version>
         <metrics.version>4.0.3</metrics.version>
         <jackson.version>2.9.7</jackson.version>
         <cucumber.version>4.1.0</cucumber.version>
-        <kotlin.version>1.2.71</kotlin.version>
-        <dokka.version>0.9.17</dokka.version>
+        <kotlin.version>1.8.10</kotlin.version>
+        <strikt.version>0.34.1</strikt.version>
     </properties>
 
     <dependencies>
@@ -47,17 +48,6 @@
                     <groupId>commons-logging</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.14.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>27.0-jre</version>
         </dependency>
 
         <dependency>
@@ -122,6 +112,13 @@
             <groupId>com.google.dagger</groupId>
             <artifactId>dagger</artifactId>
             <version>${dagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.strikt</groupId>
+            <artifactId>strikt-jvm</artifactId>
+            <version>${strikt.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -322,7 +319,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>nuprocess</artifactId>
-            <version>1.2.4</version>
+            <version>2.0.5</version>
         </dependency>
 
         <!-- Validation methods. BeanUtils 1.9.x added to knock out older version that overlaps commons-collections -->
@@ -344,6 +341,13 @@
             <version>2.19.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Selenium Grid / Chrome for tests -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -356,23 +360,6 @@
     <build>
         <defaultGoal>clean verify</defaultGoal>
         <plugins>
-            <plugin>
-                <groupId>org.jetbrains.dokka</groupId>
-                <artifactId>dokka-maven-plugin</artifactId>
-                <version>${dokka.version}</version>
-                <configuration>
-                    <jdkVersion>8</jdkVersion>
-                    <outputFormat>gfm</outputFormat>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>dokka</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
@@ -455,7 +442,7 @@
                         <configuration>
                             <sourceDirs>
                                 <source>src/main/kotlin</source>
-                                <source>target/generated-sources/annotations</source>
+                                <source>target/generated-sources/kapt</source>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -498,7 +485,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.11.0</version>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
@@ -522,8 +509,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
         </plugins>
